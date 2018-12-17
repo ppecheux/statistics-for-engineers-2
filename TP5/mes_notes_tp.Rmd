@@ -1,0 +1,77 @@
+---
+title: "TP5"
+output: html_notebook
+---
+
+La variable à régresser se situe à gauche, le ou les régresseurs à droite.
+
+```{r}
+donnees <- data.frame(varx = c(0, 0.2, 0.3, 0.6),
+vary = c(1.01, 1.44, 1.55, 2.1))
+donnees
+```
+
+Question 1
+```{r}
+lm=lm(vary~varx, data = donnees)
+lm
+```
+
+On trouve la régression suivante:
+vary=b*varx + a= 1.789*varx + 1.033
+
+Question 2
+Uilisation de plot et de abline
+
+```{r}
+plot(donnees$varx,donnees$vary)
+abline(lm$coefficients[1],lm$coefficients[2])
+```
+
+Question 3
+
+voir plus d'infos sur la regression
+```{r}
+data_sum=summary(lm)
+data_sum
+```
+
+On peut vérifier que la somme des résidus fait 0
+```{r}
+sum(data_sum$residuals)
+```
+On peut aussi vérifier que x_*b+a=y_
+
+```{r}
+mean(donnees$varx)*lm$coefficients[2]+lm$coefficients[1]
+```
+```{r}
+mean(donnees$vary)
+```
+
+Question 4
+
+soit la variance empirique de l'echantillon Y
+```{r}
+length(donnees$vary)
+```
+
+```{r}
+SY2=var((donnees$vary))*(length(donnees$vary)-1)/length(donnees$vary)
+SY2
+```
+
+La variance expliquée par le régression
+lm$fitted.value est le Y^i
+```{r}
+(Sreg <- mean((lm$fitted.values - mean(donnees$vary))^2))
+```
+
+Et la variance résiduelle est
+```{r}
+Sres=var(lm$residuals)*(length(donnees$varx)-1)/length(donnees$varx)
+#ou bien
+mean(lm$residuals**2)
+Sres
+```
+
