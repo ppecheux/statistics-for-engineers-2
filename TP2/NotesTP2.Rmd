@@ -1,0 +1,171 @@
+---
+title: "NotesTP2"
+output: html_notebook
+---
+
+```{r}
+library(MASS)
+hist(painters$Composition, main = "Composition", xlab = "Note")
+```
+
+Calcul de toutes les moyennes
+
+```{r}
+(moyennes=(painters$Composition+painters$Drawing+painters$Colour+painters$Expression)/4)
+```
+ou bien
+```{r}
+(moyennes=(painters[,1]+painters[,2]+painters[,3]+painters[,4])/4)
+```
+
+variance  PAS corrigé
+```{r}
+var(moyennes)*(length(moyennes)-1)/length(moyennes)
+```
+et ec type PAS corrigé
+```{r}
+sd(moyennes)*sqrt((length(moyennes)-1)/length(moyennes))
+```
+
+LES LOIS
+
+— la loi uniforme : unif ;
+— la loi de Poisson : pois ;
+— la loi exponentielle : exp ;
+— la loi binomiale : binom ;
+— la loi normale : norm ;
+— la loi de Student : t ;
+— la loi du χ 2 : chisq ;
+— la loi de Fisher : f.
+Pour chacune de ces lois, il est possible d’accéder 
+à la fonction de densité avec d,
+à la fonction de répartition avec p,
+aux fractiles avec q
+à un générateur de nombre aléatoire avec r.
+
+étudions la loi uniforme sur l’intervalle [2, 5] notée U [2,5] .
+La valeur de sa fonction de densité f (x) est
+
+```{r}
+x=c(1,2,3,4,5)
+(for (i in x){
+  print(dunif(x = i,min = 2,max = 4))
+})
+```
+
+ou bien
+```{r}
+dunif(x,min=2,max=4)
+```
+
+pour la répartition
+P(X<x)
+```{r}
+punif(x,min=2,max = 4)
+```
+
+Question 6
+1. une variable normale centrée-réduite est supérieure à 3 ;
+```{r}
+(1-pnorm(3,mean = 0, sd= 1))
+```
+2. une variable normale d’espérance 35 et d’écart-type 6 est inférieure à 42 ;
+```{r}
+pnorm(42,mean = 35,sd=6)
+```
+3. une variable normale d’espérance 35 et d’écart-type 6 est comprise entre 40 et 50 ;
+```{r}
+mu=35
+sigma=6
+(pnorm(50,mean = mu,sd=sigma)-pnorm(40,mean = mu,sd=sigma))
+```
+
+4. obtenir n − 1 faces sur n lancers d’une pièce de monnaie équilibrée, avec n = 5, 10, 30 ;
+C'est dans ce genre de loi discrete qu'on utilise d
+```{r}
+n=c(5,10,30)
+dbinom(n-1,n,prob = 0.5)
+```
+
+5. obtenir strictement plus de 14 faces sur 20 lancers d’une pièce de monnaie équilibrée ;
+```{r}
+1-pbinom(14,size=20,prob = 0.5)
+```
+
+6. obtenir entre 10 et 15 faces sur 20 lancers d’une pièce de monnaie équilibrée.
+```{r}
+sum(dbinom((10:15),size = 20,prob = 0.5))
+```
+
+Question 7 
+Calcul de fractiles
+
+```{r}
+alpha <- c(0.05, 0.1, 0.9)
+qnorm(alpha,mean=0,sd=1)
+```
+```{r}
+qchisq(alpha,df=10)#df = degree of freedom
+```
+
+3. loi de Student à 5 degrés de liberté ;
+```{r}
+qt(alpha,df=5)
+```
+
+. loi de Fisher à 2 et 5 degrés de liberté.
+```{r}
+qf(alpha,df1=2,df2=5)
+```
+
+Faire sa porpre fonction de répartition
+```{r}
+dloi <- function(x, b) {
+  a <- 2/b^2
+  f <- a * x
+  f[x < 0] <- 0
+  f[x > b] <- 0
+  return(f)
+}
+x=c(-1, 0, 1, 2, 3, 4, 5)
+dloi(-1:5,3)
+```
+
+faire une courbe pour dloi
+```{r}
+curve(dloi(x,3),from = -5, to= 5)
+```
+
+coder ploi
+```{r}
+ploi <- function(x, b) {
+  if (b <= 0)
+    stop("on doit avoir b > 0")
+  F <- x^2/b^2
+  F[x < 0] <- 0
+  F[x >= b] <- 1
+  return(F)
+}
+#curve(ploi(x,3),from = -5, to= 5)
+```
+
+q
+```{r}
+qloi <- function(alpha, b) {
+  fa <- b * sqrt(alpha)
+  fa[alpha == 0] <- 0
+  fa[alpha == 1] <- b
+  return(fa)
+}
+#curve(qloi(x, 3), from = 0, to = 1)
+```
+
+r
+```{r}
+  rloi <- function(n, b) {
+  u <- runif(n)
+  x <- qloi(u, b)
+  return(x)
+}
+```
+

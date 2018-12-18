@@ -1,0 +1,51 @@
+---
+title: "NotesTP4"
+output: html_notebook
+---
+
+
+Intervalle de confiance
+
+Question 5
+
+Construction d'un intervalle de confiance pour mu avec sigma connu
+
+```{r}
+n=100
+mu=155
+sigma=60
+x=rnorm(n,mean = mu,sd=sigma)
+alpha=0.05
+
+ICmu= mean(x)+c(-1,1)*qnorm(1-alpha/2)*sigma/sqrt(n)
+ICmu
+```
+
+Question 6
+
+Construction d'un intervalle de confiance pour mu avec sigma inconnu
+On utilise la répartition de la loi de student avec la formule
+
+```{r}
+ICmu= mean(x)+c(-1,1)*qt(1-alpha/2,df=n-1)*sd(x)/sqrt(n)
+ICmu
+```
+ou bien
+```{r}
+t.test(x, conf.level = 1 - alpha)$conf.int
+```
+
+Dans le cas d'une loi binomiale de param n, p on a la convergence en loi N(0,1)
+On peut avec le lemme de slutsky en déduire un intervalle de confiance facile:
+
+```{r}
+epreuves=1
+x=rbinom(n,size=epreuves,prob=0.2)#pas compris cette fonction
+phat=mean(x)
+phat
+
+IC <- phat +c(-1, 1) * qnorm(1 - alpha / 2) *sqrt(phat * (1 - phat) / n)
+
+IC
+```
+
