@@ -1,0 +1,87 @@
+---
+title: "R Notebook"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+vecteurs dans r
+```{r}
+#pour les qualitatives les vecteurs
+c(1,2,3,4,5)-c(1:5)+c(1,c(2,3),4,5)#Vecteurs equivalents
+```
+
+operations sur les vecteurs
+```{r}
+v <-c(1, 2, 3, 4, 5)
+u <-c(5, 4, 3, 2, 1)
+
+u*v # donne 5 8 9 8 5
+concate <- c(u,v)
+
+any(concate!=floor(concate))
+
+floor(concate[concate!=floor(concate)])#transformer en entier
+length(concate[concate!=floor(concate)])
+min(concate)
+any(concate<1)
+```
+
+```{r}
+u==2#donne un vecteur de bool avec true quand u[i]==2
+#pour les sous vecteurs
+v[2:4]==v[c(2,3,4)] #r?cup?re un sous vecteur
+concate[concate>4] <- 0.5 #change la valeur de certaines valeurs
+```
+
+pour les donnes qualitatives
+```{r}
+f = factor(c("R","V","B","R"))
+table(f) #associe le nombre d'occurence avec chaque variable
+```
+
+```{r}
+length(f[f=="R"])
+```
+```{r}
+X <- sy02
+
+length(sy02)-ncol(sy02)#equivalent
+names(X)#pour les entetes
+nrow(X)
+head(X)
+summary(X)
+```
+
+```{r}
+mean(X[X$correcteur.median=="EG","median"])
+nrow(X[X$median<X$final,])/nrow(X)
+```
+
+```{r}
+nf = X[,"final"]
+
+-quantile(nf,0.25)+quantile(nf,0.75)
+IQR(nf)#?quart interquartile
+
+sortednf=sort(nf)
+mean(sortednf[11:length(nf)-10]) #moyenne tronqu?e ? l'ordre 10
+
+#5 Analyse univari?e
+
+
+table(X$correcteur.median) #table qui compte le nombre d'occurence du correcteur dans la colonne
+
+```
+
+```{r}
+#pour trouver le nombre de valeurs ab?rantes:
+bound = quantile(nf,0.25)-IQR(nf)*1.5
+length(nf[nf<bound])
+```
+
+```{r}
+stem(X$final)#pour un tree graph
+
+```
+

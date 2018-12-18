@@ -1,6 +1,6 @@
 #2 Premiers pas
 
-#Opérations
+#Op?rations
 6*7
 2**3
 5*6/2
@@ -11,7 +11,7 @@ log2(8)
 log(exp(0))
 identical(1,exp(0))#revoie true or false
 
-#3 Structures de données usuelles
+#3 Structures de donn?es usuelles
 
 #pour les qualitatives les vecteurs
 c(1,2,3,4,5)-c(1:5)+c(1,c(2,3),4,5)#Vecteurs equivalents
@@ -22,7 +22,7 @@ u==2#donne un vecteur de bool avec true quand u[i]==2
 u*v# donne 5 8 9 8 5
 
 #pour les sous vecteurs
-v[2:4]==v[c(2,3,4)] #récupère un sous vecteur
+v[2:4]==v[c(2,3,4)] #r?cup?re un sous vecteur
 
 mean(v)
 sup3v <- v[v>=3] #on prends sous vecteur avec les valeurs du vecteur masque bool.
@@ -52,6 +52,9 @@ data.frame(v,f,v>3)
 #setwd("~/Documents/Cours/Branche/GI01/sy02/tps/data")
 
 X <- read.csv("sy02.data")
+
+
+
 length(X)-ncol(X)#equivalent
 names(X)#pour les entetes
 nrow(X)
@@ -70,12 +73,12 @@ max(X[,"final"])
 summary((X[,"final"]))
 
 -quantile(nf,0.25)+quantile(nf,0.75)
-IQR(nf)#équart interquartile
+IQR(nf)#?quart interquartile
 
 sortednf=sort(nf)
-mean(sortednf[11:length(nf)-10]) #moyenne tronquée à l'ordre 10
+mean(sortednf[11:length(nf)-10]) #moyenne tronqu?e ? l'ordre 10
 
-#5 Analyse univariée
+#5 Analyse univari?e
 
 table(f) #associe le nombre d'occurence avec chaque variable
 barplot(table(f))
@@ -83,7 +86,7 @@ table(X$correcteur.median) #table qui compte le nombre d'occurence du correcteur
 barplot(table(X$correcteur.median))
 
 boxplot(X$final)
-#pour trouver le nombre de valeurs abérantes:
+#pour trouver le nombre de valeurs ab?rantes:
 bound = quantile(nf,0.25)-IQR(nf)*1.5
 length(nf[nf<bound])
 
@@ -91,10 +94,10 @@ stem(X$final)
 
 hist(X$moyenne, breaks = c(0,15,20))
 
-#pour retrouver la densité de l'histogramme:
+#pour retrouver la densit? de l'histogramme:
 length(X$moyenne[X$moyenne<15])/length(X$moyenne)/(15-0)
 
-#6 Analyse bivariée
+#6 Analyse bivari?e
 
 plot(X$median,X$final)
 plot(final~median,data=X)
