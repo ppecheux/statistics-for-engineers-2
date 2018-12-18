@@ -61,13 +61,13 @@ SY2=var((donnees$vary))*(length(donnees$vary)-1)/length(donnees$vary)
 SY2
 ```
 
-La variance expliquée par le régression
+La variance expliquée par le régression Sres= mean((Yi^-Y_)**2)
 lm$fitted.value est le Y^i
 ```{r}
 (Sreg <- mean((lm$fitted.values - mean(donnees$vary))^2))
 ```
 
-Et la variance résiduelle est
+Et la variance résiduelle  Sres = mean((Yi-Y^i)**2) est
 ```{r}
 Sres=var(lm$residuals)*(length(donnees$varx)-1)/length(donnees$varx)
 #ou bien
@@ -75,3 +75,96 @@ mean(lm$residuals**2)
 Sres
 ```
 
+Question 5
+
+Coeff de détermination r**2 = Sreg/SY2 =coeff pearson entre x et y au carre
+vérification
+```{r}
+Sreg/SY2
+```
+ou bien
+```{r}
+data_sum$r.squared
+```
+ou bien
+```{r}
+cor(donnees$varx, donnees$vary, method = "pearson")^2
+```
+Evalutaion visuellement la normalité des résidus à l’aide d’un diagramme quantile–quantile
+avec des fonctions qqnorm et qqline.
+
+```{r}
+attach(anscombe)
+rl1 <- lm(y1 ~ x1)
+rl2 <- lm(y2 ~ x2)
+rl3 <- lm(y3 ~ x3)
+rl4 <- lm(y4 ~ x4)
+
+qqnorm(rl1$residuals,main = "Norm Q-Q plot (rl1)")
+qqline(rl1$residuals)
+qqnorm(rl2$residuals,main = "Norm Q-Q plot (rl2)")
+qqline(rl2$residuals)
+qqnorm(rl3$residuals,main = "Norm Q-Q plot (rl3)")
+qqline(rl3$residuals)
+qqnorm(rl4$residuals,main = "Norm Q-Q plot (rl4)")
+qqline(rl4$residuals)
+
+
+
+```
+
+Plot pour montrer les résidus en fonction des prévisions
+```{r}
+plot(rl1$fitted.values,rl1$residuals)
+plot(rl2$fitted.values,rl2$residuals)
+plot(rl3$fitted.values,rl3$residuals)
+plot(rl4$fitted.values,rl4$residuals)
+```
+2 Prédiciton
+
+```{r}
+rl=lm(Pression ~ Temp, data = hooker.data)
+summary(rl)
+```
+Question 10
+
+donner un intervalle de confiance sur les coeffs de la régression lineaire aka droite des mondres carres
+
+```{r}
+confint(rl,level=0.99)
+```
+On veut utiliser la fonction prédict pour prédire la pression a partir d'une mesure de temp
+
+```{r}
+newdata=data.frame(Temp=97)
+predict(rl,newdata, interval = "confidence")
+```
+
+3 Etude de la loi de MOORE
+
+```{r}
+rl.moore <- lm(log(Transistor.count) ~ Date.of.introduction, data = moore.data)
+summary(rl.moore)
+```
+
+```{r}
+(IC <- confint(rl.moore, "Date.of.introduction"))
+```
+
+Pour prédire count en fonction de date of introduction
+interval ="confidence" pour tenir compte de l'incertitude sur x puis sur y
+```{r}
+exp(predict(rl.moore, newdata = data.frame(Date.of.introduction = 2018), interval ="confidence"))
+```
+
+interval ="prediction" pour tenir compte de l'incertitude seulement sur y
+```{r}
+exp(predict(rl.moore, newdata = data.frame(Date.of.introduction = 2018), interval ="confidence"))
+
+```
+Pour trouver la période de doublage:
+```{r}
+log(2)/IC
+```
+
+Correspondant à 2 ans
